@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/zoom_header_container"
+    android:layout_width="match_parent"
+    android:paddingTop="12.5dp"
+    android:paddingBottom="15dp"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/skip_pull_zoom_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/pull_up_jump"
+        android:textColor="#ffc8c3c0"
+        android:gravity="center"
+        android:drawablePadding="6dp"
+        android:textSize="12sp"
+        android:drawableTop="@drawable/icon_pull_zoom_footer"
+        />
+
+    <View
+        android:id="@+id/zoom_image_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/skip_pull_zoom_header"/>
+</RelativeLayout>

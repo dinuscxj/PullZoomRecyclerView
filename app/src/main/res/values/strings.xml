@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">PullZoomRecyclerView</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_pull_zoom_header">PullZoomHeaderActivity</string>
+    <string name="title_activity_pull_zoom_footer">PullZoomFooterActivity</string>
+
+    <string name="zoom_title">PullZoomRecyclerView</string>
+    <string name="zoom_description">
+        Using recyclerview requires three steps:\n
+        Step one: use the PullZoomRecyclerView in XML\n
+        Step two: call the function setAdapter and the function setLayoutManager\n
+        Step threee: call the function setZoomView and the function setHeaderContainer
+    </string>
+    <string name="zoom_conclusion">I hope it is useful for you</string>
+
+    <string name="image_name">image_name%d</string>
+
+    <string name="pull_up_jump">Pull-up jump</string>
+    <string name="loosen_the_jump">Loosen the jump</string>
+</resources>
