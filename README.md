@@ -27,8 +27,7 @@ Using recyclerview requires three steps:<br/>
  mPullZoomRecyclerView.setZoomView(zoomView);
  mPullZoomRecyclerView.setHeaderContainer(headerContainer);
  ```
- ## License
-
+## License
     Copyright 2015-2019 dinus
 
     Licensed under the Apache License, Version 2.0 (the "License");
