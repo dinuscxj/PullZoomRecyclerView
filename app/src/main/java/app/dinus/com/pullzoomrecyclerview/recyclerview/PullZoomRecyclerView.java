@@ -36,9 +36,13 @@ public class PullZoomRecyclerView extends PullZoomBaseView<RecyclerView> {
         return new DecelerateInterpolator(2.0f);
     }
 
+    @SuppressWarnings("ResourceType")
     @Override
-    protected RecyclerView createWrapperView(Context context) {
-        return new RecyclerView(context);
+    protected RecyclerView createWrapperView(Context context, AttributeSet attrs) {
+        RecyclerView recyclerView= new RecyclerView(context, attrs);
+        //prevent id repeat
+        recyclerView.setId(Integer.MIN_VALUE);
+        return recyclerView;
     }
 
     @Override

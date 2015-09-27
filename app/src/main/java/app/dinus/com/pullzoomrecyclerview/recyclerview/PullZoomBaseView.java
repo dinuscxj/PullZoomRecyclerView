@@ -55,7 +55,7 @@ public abstract class PullZoomBaseView<T extends View> extends LinearLayout {
         isPullStart = false;
         isZooming = false;
 
-        mWrapperView = createWrapperView(context);
+        mWrapperView = createWrapperView(context, attrs);
         addView(mWrapperView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
     }
 
@@ -194,7 +194,7 @@ public abstract class PullZoomBaseView<T extends View> extends LinearLayout {
         return isZooming;
     }
 
-    protected abstract T createWrapperView(Context context);
+    protected abstract T createWrapperView(Context context, AttributeSet attrs);
 
     protected abstract int createDefaultPullZoomModel();
 
