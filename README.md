@@ -1,16 +1,18 @@
 
 ## PullZoomRecyclerView
-Using recyclerview requires three steps:<br/>
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-PullZoomRecyclerView-green.svg?style=true)](https://android-arsenal.com/details/3/3343)
+
+Using RecyclerView requires three steps:<br/>
 * Step one: use the PullZoomRecyclerView in XML<br/>
 * Step two: call the function setAdapter and the function setLayoutManager<br/>
-* Step threee: call the function setZoomView and the function setHeaderContainer<br/>
-![](https://raw.githubusercontent.com/dinuscxj/PullZoomRecyclerView/master/Preview/device-2015-08-30-182407.png?width=300)
-![](https://raw.githubusercontent.com/dinuscxj/PullZoomRecyclerView/master/Preview/device-2015-08-30-182433.png?width=300)<br/>
+* Step three: call the function setZoomView and the function setHeaderContainer<br/>
+![](https://raw.githubusercontent.com/dinuscxj/PullZoomRecyclerView/master/Preview/PullZoomFooter.gif?width=300)
+![](https://raw.githubusercontent.com/dinuscxj/PullZoomRecyclerView/master/Preview/PullZoomHeader.gif?width=300)<br/>
 
 ## Features
  * Two Pull Zoom mode (ZOOM_FOOTER or ZOOM_HEADER)
  * Listening pull process (including pullStart、 pullZooming, pullEnd)
- * You can reset the default smooth scroll to top interplator(the default is DecelerateInterpolator)
+ * You can reset the default smooth scroll to top interpolator(the default is DecelerateInterpolator)
 
 ## Usage
  ```java
