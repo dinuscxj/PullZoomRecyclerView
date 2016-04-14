@@ -34,9 +34,6 @@ public class PullZoomHeaderActivity extends PullZoomActivity {
      */
     public static class PullZoomHeaderFragment extends PullZoomFragment {
 
-        public PullZoomHeaderFragment() {
-        }
-
         public static PullZoomHeaderFragment newInstance() {
             return new PullZoomHeaderFragment();
         }
@@ -72,8 +69,6 @@ public class PullZoomHeaderActivity extends PullZoomActivity {
                 });
             }
 
-            private List<Integer> listData;
-
             public PullZoomHeaderAdapter(List<Integer> listData) {
                 this();
                 this.listData = listData;
@@ -84,10 +79,7 @@ public class PullZoomHeaderActivity extends PullZoomActivity {
                 if (position == 0) {
                     return ITEM_HEADER;
                 }
-
-                position--;
-
-                return listData.get(position);
+                return listData.get(--position);
             }
 
             @Override

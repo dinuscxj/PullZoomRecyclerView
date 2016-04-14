@@ -53,9 +53,9 @@ public class PullZoomRecyclerView extends PullZoomBaseView<RecyclerView> {
     @Override
     protected boolean isReadyZoom() {
         if (mModel == ZOOM_HEADER) {
-            return isFirstItemCompletlyVisible();
+            return isFirstItemCompletelyVisible();
         } else if (mModel == ZOOM_FOOTER) {
-            return isLastItemCompletlyVisible();
+            return isLastItemCompletelyVisible();
         }
 
         return false;
@@ -99,30 +99,35 @@ public class PullZoomRecyclerView extends PullZoomBaseView<RecyclerView> {
         this.sSmoothToTopInterpolator = sSmoothToTopInterpolator;
     }
 
-    private boolean isFirstItemCompletlyVisible() {
+    private boolean isFirstItemCompletelyVisible() {
         if (mWrapperView != null) {
             RecyclerView.Adapter adapter = mWrapperView.getAdapter();
-            RecyclerView.LayoutManager mLayoutmanager = mWrapperView.getLayoutManager();
+            RecyclerView.LayoutManager mLayoutManager = mWrapperView.getLayoutManager();
 
             if (null == adapter || adapter.getItemCount() == 0) {
                 return false;
-            } else if (null == mLayoutmanager || mLayoutmanager.getItemCount() == 0){
+            } else if (null == mLayoutManager || mLayoutManager.getItemCount() == 0) {
                 return false;
             } else {
-                int firstVisiblePosition = ((RecyclerView.LayoutParams) mLayoutmanager.getChildAt(0).getLayoutParams()).getViewPosition();
-                if (firstVisiblePosition == 0) {
-                    final View firstVisibleChild = mWrapperView.getChildAt(0);
-                    if (firstVisibleChild != null) {
-                        return firstVisibleChild.getTop() >= mWrapperView.getTop();
-                    }
-                }
+                return checkFirstItemCompletelyVisible(mLayoutManager);
             }
         }
 
         return false;
     }
 
-    private boolean isLastItemCompletlyVisible() {
+    private boolean checkFirstItemCompletelyVisible(RecyclerView.LayoutManager mLayoutManager) {
+        int firstVisiblePosition = ((RecyclerView.LayoutParams) mLayoutManager.getChildAt(0).getLayoutParams()).getViewPosition();
+        if (firstVisiblePosition == 0) {
+            final View firstVisibleChild = mWrapperView.getChildAt(0);
+            if (firstVisibleChild != null) {
+                return firstVisibleChild.getTop() >= mWrapperView.getTop();
+            }
+        }
+        return false;
+    }
+
+    private boolean isLastItemCompletelyVisible() {
         if (mWrapperView != null) {
             RecyclerView.Adapter adapter = mWrapperView.getAdapter();
             RecyclerView.LayoutManager mLayoutmanager = mWrapperView.getLayoutManager();
@@ -132,20 +137,25 @@ public class PullZoomRecyclerView extends PullZoomBaseView<RecyclerView> {
             } else if (null == mLayoutmanager || mLayoutmanager.getItemCount() == 0){
                 return false;
             } else {
-                int lastVisiblePosition = mLayoutmanager.getChildCount() - 1;
-                int currentLastVisiblePosition = ((RecyclerView.LayoutParams) mLayoutmanager.getChildAt(lastVisiblePosition).getLayoutParams()).getViewPosition();
-                if (currentLastVisiblePosition == mLayoutmanager.getItemCount() - 1) {
-                    final View lastVisibleChild = mWrapperView.getChildAt(lastVisiblePosition);
-                    if (lastVisibleChild != null) {
-                        if (mHeaderContainer != null && mHeaderHeight <= 0) {
-                            mHeaderHeight = mHeaderContainer.getMeasuredHeight();
-                        }
-                        return lastVisibleChild.getBottom() <= mWrapperView.getBottom();
-                    }
-                }
+                return checkLastItemCompletelyVisible(mLayoutmanager);
             }
         }
 
+        return false;
+    }
+
+    private boolean checkLastItemCompletelyVisible(RecyclerView.LayoutManager mLayoutmanager) {
+        int lastVisiblePosition = mLayoutmanager.getChildCount() - 1;
+        int currentLastVisiblePosition = ((RecyclerView.LayoutParams) mLayoutmanager.getChildAt(lastVisiblePosition).getLayoutParams()).getViewPosition();
+        if (currentLastVisiblePosition == mLayoutmanager.getItemCount() - 1) {
+            final View lastVisibleChild = mWrapperView.getChildAt(lastVisiblePosition);
+            if (lastVisibleChild != null) {
+                if (mHeaderContainer != null && mHeaderHeight <= 0) {
+                    mHeaderHeight = mHeaderContainer.getMeasuredHeight();
+                }
+                return lastVisibleChild.getBottom() <= mWrapperView.getBottom();
+            }
+        }
         return false;
     }
 
