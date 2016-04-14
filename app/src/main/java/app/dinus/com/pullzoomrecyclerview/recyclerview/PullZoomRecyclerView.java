@@ -176,26 +176,24 @@ public class PullZoomRecyclerView extends PullZoomBaseView<RecyclerView> {
         }
 
         public void run() {
-            if (mZoomView != null) {
-                if ((!mIsFinished) && (mScale > 1.0f)) {
-                    // fix PullToZoomView bug  ---dinus
-                    // should not convert the System.currentTimeMillis() to float
-                    // otherwise the value of (System.currentTimeMillis() - mStartTime) will still be zero
-                    float zoomBackProgress = (System.currentTimeMillis() - mStartTime) / (float) mDuration;
-                    ViewGroup.LayoutParams localLayoutParams = mHeaderContainer.getLayoutParams();
+            if (mZoomView != null && (!mIsFinished) && (mScale > 1.0f)) {
+                // fix PullToZoomView bug  ---dinus
+                // should not convert the System.currentTimeMillis() to float
+                // otherwise the value of (System.currentTimeMillis() - mStartTime) will still be zero
+                float zoomBackProgress = (System.currentTimeMillis() - mStartTime) / (float) mDuration;
+                ViewGroup.LayoutParams localLayoutParams = mHeaderContainer.getLayoutParams();
 
-                    if (zoomBackProgress > 1.0f) {
-                        localLayoutParams.height = mHeaderHeight;
-                        mHeaderContainer.setLayoutParams(localLayoutParams);
-                        mIsFinished = true;
-                        return;
-                    }
-
-                    float currentSacle = mScale - (mScale - 1.0F) * sSmoothToTopInterpolator.getInterpolation(zoomBackProgress);
-                    localLayoutParams.height = ((int) (currentSacle * mHeaderHeight));
+                if (zoomBackProgress > 1.0f) {
+                    localLayoutParams.height = mHeaderHeight;
                     mHeaderContainer.setLayoutParams(localLayoutParams);
-                    post(this);
+                    mIsFinished = true;
+                    return;
                 }
+
+                float currentSacle = mScale - (mScale - 1.0F) * sSmoothToTopInterpolator.getInterpolation(zoomBackProgress);
+                localLayoutParams.height = (int) (currentSacle * mHeaderHeight);
+                mHeaderContainer.setLayoutParams(localLayoutParams);
+                post(this);
             }
         }
 
@@ -203,7 +201,7 @@ public class PullZoomRecyclerView extends PullZoomBaseView<RecyclerView> {
             if (mZoomView != null) {
                 mStartTime = System.currentTimeMillis();
                 mDuration = animationDuration;
-                mScale = ((float) (mHeaderContainer.getHeight()) / mHeaderHeight);
+                mScale = (float) mHeaderContainer.getHeight() / mHeaderHeight;
                 mIsFinished = false;
                 post(this);
             }

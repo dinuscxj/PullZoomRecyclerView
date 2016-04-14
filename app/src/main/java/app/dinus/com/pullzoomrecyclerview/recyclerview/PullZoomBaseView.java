@@ -112,6 +112,8 @@ public abstract class PullZoomBaseView<T extends View> extends LinearLayout {
                     return true;
                 }
                 break;
+            default:
+                break;
         }
         return false;
     }
@@ -161,6 +163,8 @@ public abstract class PullZoomBaseView<T extends View> extends LinearLayout {
             case MotionEvent.ACTION_CANCEL:
                 // do nothing
                 // the reset action will be done in the function onTouchEvent
+                break;
+            default:
                 break;
         }
         return isPullStart;

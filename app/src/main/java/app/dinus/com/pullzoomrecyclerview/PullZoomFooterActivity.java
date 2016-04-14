@@ -77,7 +77,7 @@ public class PullZoomFooterActivity extends ActionBarActivity {
 
         //you can also exends RecyclerView.Adapter
         private class PullZoomAdapter extends RecyclerListAdapter{
-            {
+            public PullZoomAdapter() {
                 addViewType(Integer.class, new ViewHolderFactory<PullZoomItemHolder>() {
                     @Override
                     public PullZoomItemHolder onCreateViewHolder(ViewGroup parent) {
@@ -96,6 +96,7 @@ public class PullZoomFooterActivity extends ActionBarActivity {
             private List<Integer> listData ;
 
             public PullZoomAdapter(List<Integer> listData) {
+                this();
                 this.listData = listData;
             }
 
