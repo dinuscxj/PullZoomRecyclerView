@@ -34,6 +34,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 Intent footerIntent = new Intent(MainActivity.this, PullZoomFooterActivity.class);
                 startActivity(footerIntent);
                 break;
+            default:
+                break;
         }
     }
 }

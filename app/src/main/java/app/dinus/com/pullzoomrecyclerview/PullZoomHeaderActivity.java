@@ -68,7 +68,7 @@ public class PullZoomHeaderActivity extends ActionBarActivity {
             });
         }
 
-        private List<Integer> createPullZoomData(){
+        private List<Integer> createPullZoomData() {
             List<Integer> pullZoomData = new ArrayList<>();
             Collections.addAll(pullZoomData,
                     new Integer[]{R.drawable.p1, R.drawable.p2, R.drawable.p3, R.drawable.p4,
@@ -79,8 +79,8 @@ public class PullZoomHeaderActivity extends ActionBarActivity {
         }
 
         //you can also exends RecyclerView.Adapter
-        private class PullZoomAdapter extends RecyclerListAdapter{
-            {
+        private class PullZoomAdapter extends RecyclerListAdapter {
+            public PullZoomAdapter() {
                 addViewType(Integer.class, new ViewHolderFactory<PullZoomItemHolder>() {
                     @Override
                     public PullZoomItemHolder onCreateViewHolder(ViewGroup parent) {
@@ -99,6 +99,7 @@ public class PullZoomHeaderActivity extends ActionBarActivity {
             private List<Integer> listData ;
 
             public PullZoomAdapter(List<Integer> listData) {
+                this();
                 this.listData = listData;
             }
 
@@ -118,7 +119,7 @@ public class PullZoomHeaderActivity extends ActionBarActivity {
                 return listData.size() + 1;
             }
 
-            private class PullZoomHeaderHolder extends RecyclerListAdapter.ViewHolder<Object>{
+            private class PullZoomHeaderHolder extends RecyclerListAdapter.ViewHolder<Object> {
                 private ImageView zoomView ;
                 private ViewGroup zoomHeaderContainer;
 
@@ -138,7 +139,7 @@ public class PullZoomHeaderActivity extends ActionBarActivity {
                 }
             }
 
-            private class PullZoomItemHolder extends RecyclerListAdapter.ViewHolder<Integer>{
+            private class PullZoomItemHolder extends RecyclerListAdapter.ViewHolder<Integer> {
                 private ImageView imageView ;
                 private TextView textView;
                 public PullZoomItemHolder(@NonNull ViewGroup parent) {

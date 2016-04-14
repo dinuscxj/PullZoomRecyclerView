@@ -9,6 +9,11 @@ import java.util.HashMap;
 
 public abstract class RecyclerListAdapter<T, VH extends RecyclerListAdapter.ViewHolder<T>> extends RecyclerView.Adapter<VH> {
 
+    public static final Object ITEM_HEADER = new Object() { };
+    public static final Object ITEM_FOOTER = new Object() { };
+    public static final Class<?> TYPE_HEADER = ITEM_HEADER.getClass();
+    public static final Class<?> TYPE_FOOTER = ITEM_FOOTER.getClass();
+
     private HashMap<Class<?>, Integer>          mViewHolderTypeRegistry     = new HashMap<>();
     private HashMap<Integer, ViewHolderFactory> mViewHolderFactoryRegistry  = new HashMap<>();
 
@@ -77,15 +82,15 @@ public abstract class RecyclerListAdapter<T, VH extends RecyclerListAdapter.View
 
         private final View mRootView;
 
-        @SuppressWarnings("unchecked")
-        public <VT extends View> VT getRootView() {
-            return (VT) mRootView;
-        }
-
         public ViewHolder(@NonNull View view) {
             super(view);
             mRootView = view;
             mRootView.setTag(this);
+        }
+
+        @SuppressWarnings("unchecked")
+        public <VT extends View> VT getRootView() {
+            return (VT) mRootView;
         }
 
         public abstract void bind(T item, int position);
@@ -95,10 +100,5 @@ public abstract class RecyclerListAdapter<T, VH extends RecyclerListAdapter.View
     public interface ViewHolderFactory<VH extends ViewHolder> {
         VH onCreateViewHolder(ViewGroup parent);
     }
-
-    public static final Object ITEM_HEADER = new Object() { };
-    public static final Object ITEM_FOOTER = new Object() { };
-    public static final Class<?> TYPE_HEADER = ITEM_HEADER.getClass();
-    public static final Class<?> TYPE_FOOTER = ITEM_FOOTER.getClass();
 
 }
