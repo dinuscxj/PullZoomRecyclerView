@@ -30,9 +30,6 @@ public class PullZoomFooterActivity extends PullZoomActivity {
      */
     public static class PullZoomFooterFragment extends PullZoomFragment {
 
-        public PullZoomFooterFragment() {
-        }
-
         public static PullZoomFooterFragment newInstance() {
             return new PullZoomFooterFragment();
         }
@@ -59,8 +56,6 @@ public class PullZoomFooterActivity extends PullZoomActivity {
                     }
                 });
             }
-
-            private List<Integer> listData;
 
             public PullZoomFooterAdapter(List<Integer> listData) {
                 this();
