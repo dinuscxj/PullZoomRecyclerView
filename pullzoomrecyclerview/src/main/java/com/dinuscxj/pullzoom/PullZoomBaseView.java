@@ -24,7 +24,6 @@ public abstract class PullZoomBaseView<T extends View> extends LinearLayout {
     protected ViewGroup mHeaderContainer;
     protected View mZoomView;
 
-    private float mInitTouchX;
     private float mInitTouchY;
     private float mLastTouchX;
     private float mLastTouchY;
@@ -61,61 +60,72 @@ public abstract class PullZoomBaseView<T extends View> extends LinearLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (!isZoomEnable){
+        if (!isZoomEnable) {
             return false;
         }
 
-        if (event.getEdgeFlags() != 0 && event.getAction() == MotionEvent.ACTION_DOWN){
+        if (event.getEdgeFlags() != 0 && event.getAction() == MotionEvent.ACTION_DOWN) {
             return false;
         }
+        return performTouchAction(event);
+    }
 
-        switch (event.getAction()){
+    private boolean performTouchAction(MotionEvent event) {
+        switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 // do nothing
                 // the init action has been done in the function onInterceptTouchEvent
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                if (isPullStart){
-                    isZooming = true;
-                    mLastTouchY = event.getY();
-                    mLastTouchX = event.getX();
-
-                    float scrollValue = mModel == ZOOM_HEADER ?
-                            Math.round(Math.min(mInitTouchY - mLastTouchY, 0) / FRICTION)
-                            :Math.round(Math.max(mInitTouchY - mLastTouchY, 0) / FRICTION);
-                    pullZoomEvent(scrollValue);
-
-                    if (mOnPullZoomListener != null){
-                        mOnPullZoomListener.onPullZooming(scrollValue);
-                    }
-
-                    return true;
+                if (isPullStart) {
+                    return onPullStartActionMove(event);
                 }
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
-                if (isPullStart){
-                    isPullStart = false;
-                    if (isZooming){
-                        isZooming = false;
-                        smoothScrollToTop();
-
-                        if (mOnPullZoomListener != null){
-                            final float scrollValue = mModel == ZOOM_HEADER ?
-                                    Math.round(Math.min(mInitTouchY - mLastTouchY, 0) / FRICTION)
-                                    :Math.round(Math.max(mInitTouchY - mLastTouchY, 0) / FRICTION);
-
-                            mOnPullZoomListener.onPullZoomEnd(scrollValue);
-                        }
-                    }
-                    return true;
+                if (isPullStart) {
+                    return onPullStartActionCancel();
                 }
                 break;
             default:
                 break;
         }
         return false;
+    }
+
+    private boolean onPullStartActionMove(MotionEvent event) {
+        isZooming = true;
+        mLastTouchY = event.getY();
+        mLastTouchX = event.getX();
+
+        float scrollValue = mModel == ZOOM_HEADER ?
+                Math.round(Math.min(mInitTouchY - mLastTouchY, 0) / FRICTION)
+                :Math.round(Math.max(mInitTouchY - mLastTouchY, 0) / FRICTION);
+        pullZoomEvent(scrollValue);
+
+        if (mOnPullZoomListener != null){
+            mOnPullZoomListener.onPullZooming(scrollValue);
+        }
+
+        return true;
+    }
+
+    private boolean onPullStartActionCancel() {
+        isPullStart = false;
+        if (isZooming){
+            isZooming = false;
+            smoothScrollToTop();
+
+            if (mOnPullZoomListener != null){
+                final float scrollValue = mModel == ZOOM_HEADER ?
+                        Math.round(Math.min(mInitTouchY - mLastTouchY, 0) / FRICTION)
+                        :Math.round(Math.max(mInitTouchY - mLastTouchY, 0) / FRICTION);
+
+                mOnPullZoomListener.onPullZoomEnd(scrollValue);
+            }
+        }
+        return true;
     }
 
     @Override
@@ -130,33 +140,21 @@ public abstract class PullZoomBaseView<T extends View> extends LinearLayout {
         }
 
 
+        performInterceptAction(event);
+        return isPullStart;
+    }
+
+    private void performInterceptAction(MotionEvent event) {
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
                 if (isReadyZoom()){
-                    mInitTouchX = mLastTouchX = event.getX();
-                    mInitTouchY = mLastTouchY = event.getY();
-                    isPullStart = false;
+                    onZoomReadyActionDown(event);
                 }
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                if (isReadyZoom()){
-                    float mCurrentX = event.getX();
-                    float mCurrentY = event.getY();
-
-                    float xDistance = mCurrentX - mLastTouchX;
-                    float yDistance = mCurrentY - mLastTouchY;
-
-                    if (mModel == ZOOM_HEADER && yDistance > mTouchSlop && yDistance > Math.abs(xDistance)
-                            || mModel == ZOOM_FOOTER && -yDistance > mTouchSlop && -yDistance > Math.abs(xDistance)){
-                        mLastTouchY = mCurrentY;
-                        mLastTouchX = mCurrentX;
-
-                        if (mOnPullZoomListener != null){
-                            mOnPullZoomListener.onPullStart();
-                        }
-                        isPullStart = true;
-                    }
+                if (isReadyZoom()) {
+                    onZoomReadyActionMove(event);
                 }
                 break;
             case MotionEvent.ACTION_UP:
@@ -167,7 +165,30 @@ public abstract class PullZoomBaseView<T extends View> extends LinearLayout {
             default:
                 break;
         }
-        return isPullStart;
+    }
+
+    private void onZoomReadyActionDown(MotionEvent event) {
+        mInitTouchY = mLastTouchY = event.getY();
+        isPullStart = false;
+    }
+
+    private void onZoomReadyActionMove(MotionEvent event) {
+        float mCurrentX = event.getX();
+        float mCurrentY = event.getY();
+
+        float xDistance = mCurrentX - mLastTouchX;
+        float yDistance = mCurrentY - mLastTouchY;
+
+        if (mModel == ZOOM_HEADER && yDistance > mTouchSlop && yDistance > Math.abs(xDistance)
+                || mModel == ZOOM_FOOTER && -yDistance > mTouchSlop && -yDistance > Math.abs(xDistance)){
+            mLastTouchY = mCurrentY;
+            mLastTouchX = mCurrentX;
+
+            if (mOnPullZoomListener != null){
+                mOnPullZoomListener.onPullStart();
+            }
+            isPullStart = true;
+        }
     }
 
     public void setModel(int mModel) {

@@ -28,8 +28,6 @@ public class PullZoomActivity extends ActionBarActivity {
 
         protected PullZoomRecyclerView mRecyclerView;
 
-        public PullZoomFragment() {}
-
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             return inflater.inflate(R.layout.fragment_pull_zoom_header, container, false);
@@ -56,6 +54,8 @@ public class PullZoomActivity extends ActionBarActivity {
 
         public class PullZoomAdapter extends RecyclerListAdapter {
 
+            protected List<Integer> listData;
+
             public PullZoomAdapter() {
                 addViewType(Integer.class, new ViewHolderFactory<PullZoomItemHolder>() {
                     @Override
@@ -64,8 +64,6 @@ public class PullZoomActivity extends ActionBarActivity {
                     }
                 });
             }
-
-            protected List<Integer> listData ;
 
             @Override
             public Object getItem(int position) {
