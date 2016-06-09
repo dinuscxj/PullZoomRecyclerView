@@ -15,12 +15,22 @@ Using RecyclerView requires three steps:<br/>
  * You can reset the default smooth scroll to top interpolator(the default is DecelerateInterpolator)
 
 ## Usage
- ```java
+ Add dependency
+ ```gradle
+ dependencies {
+    compile 'com.dinuscxj:pullzoomrecyclerview:1.0.0'
+ }
+ ```
+
+ Used in xml
+ ```xml
  <app.dinus.com.pullzoomrecyclerview.recyclerview.PullZoomRecyclerVie
     android:id="@+id/recycler_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>
  ```
+
+ Used in java
  ```java
  mPullZoomRecyclerView.setAdapter(new Adapter());
  mPullZoomRecyclerView.setLayoutMannager(new LinearLayoutManager(context));

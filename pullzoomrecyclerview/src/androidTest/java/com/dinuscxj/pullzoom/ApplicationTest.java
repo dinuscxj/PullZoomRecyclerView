@@ -1,4 +1,4 @@
-package app.dinus.com.pullzoomrecyclerview;
+package com.dinuscxj.pullzoom;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

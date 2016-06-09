@@ -1,4 +1,4 @@
-package app.dinus.com.pullzoomrecyclerview.recyclerview;
+package com.dinuscxj.pullzoomrecyclerview;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;

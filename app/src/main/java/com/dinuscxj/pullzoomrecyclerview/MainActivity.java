@@ -1,4 +1,4 @@
-package app.dinus.com.pullzoomrecyclerview;
+package com.dinuscxj.pullzoomrecyclerview;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;

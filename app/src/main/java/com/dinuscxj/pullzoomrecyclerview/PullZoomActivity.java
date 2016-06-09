@@ -1,4 +1,4 @@
-package app.dinus.com.pullzoomrecyclerview;
+package com.dinuscxj.pullzoomrecyclerview;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,8 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import app.dinus.com.pullzoomrecyclerview.recyclerview.PullZoomRecyclerView;
-import app.dinus.com.pullzoomrecyclerview.recyclerview.RecyclerListAdapter;
+
+import com.dinuscxj.pullzoom.PullZoomRecyclerView;
 
 import java.util.ArrayList;
 import java.util.Collections;

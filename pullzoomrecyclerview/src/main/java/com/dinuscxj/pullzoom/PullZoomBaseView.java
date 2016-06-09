@@ -1,4 +1,4 @@
-package app.dinus.com.pullzoomrecyclerview.recyclerview;
+package com.dinuscxj.pullzoom;
 
 import android.content.Context;
 import android.util.AttributeSet;
