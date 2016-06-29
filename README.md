@@ -24,7 +24,7 @@ Using RecyclerView requires three steps:<br/>
 
  Used in xml
  ```xml
-    <com.dinuscxj.pullzoom.PullZoomRecyclerView
+ <com.dinuscxj.pullzoom.PullZoomRecyclerView
     android:id="@+id/recycler_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>
