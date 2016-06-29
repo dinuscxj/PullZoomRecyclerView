@@ -16,7 +16,6 @@ public abstract class RecyclerListAdapter<T, VH extends RecyclerListAdapter.View
 
     private HashMap<Class<?>, Integer>          mViewHolderTypeRegistry     = new HashMap<>();
     private HashMap<Integer, ViewHolderFactory> mViewHolderFactoryRegistry  = new HashMap<>();
-
     /**
      * Register different type of data with different ViewHolder using ViewHolderFactory.
      * @param clazz type of data. Hierarchy tree of every data instance will be traversed to match the type.
