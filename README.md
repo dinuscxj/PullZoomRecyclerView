@@ -18,7 +18,7 @@ Using RecyclerView requires three steps:<br/>
  Add dependency
  ```gradle
  dependencies {
-    compile 'com.dinuscxj:pullzoomrecyclerview:1.0.0'
+    compile 'com.dinuscxj:pullzoomrecyclerview:1.0.2'
  }
  ```
 
