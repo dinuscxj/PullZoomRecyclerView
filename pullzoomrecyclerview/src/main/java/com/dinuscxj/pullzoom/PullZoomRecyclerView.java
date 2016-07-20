@@ -52,9 +52,9 @@ public class PullZoomRecyclerView extends PullZoomBaseView<RecyclerView> {
 
     @Override
     protected boolean isReadyZoom() {
-        if (mModel == ZOOM_HEADER) {
+        if (mMode == ZOOM_HEADER) {
             return isFirstItemCompletelyVisible();
-        } else if (mModel == ZOOM_FOOTER) {
+        } else if (mMode == ZOOM_FOOTER) {
             return isLastItemCompletelyVisible();
         }
 
@@ -73,7 +73,7 @@ public class PullZoomRecyclerView extends PullZoomBaseView<RecyclerView> {
             mHeaderContainer.setLayoutParams(layoutParams);
         }
 
-        if (mModel == ZOOM_FOOTER) {
+        if (mMode == ZOOM_FOOTER) {
             mWrapperView.scrollToPosition(mWrapperView.getAdapter().getItemCount() - 1);
         }
     }

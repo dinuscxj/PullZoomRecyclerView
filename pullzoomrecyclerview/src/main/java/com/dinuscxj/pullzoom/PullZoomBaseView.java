@@ -2,6 +2,7 @@ package com.dinuscxj.pullzoom;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -25,6 +26,7 @@ public abstract class PullZoomBaseView<T extends View> extends LinearLayout {
     protected View mZoomView;
 
     private float mInitTouchY;
+    private float mInitTouchX;
     private float mLastTouchX;
     private float mLastTouchY;
 
@@ -32,7 +34,7 @@ public abstract class PullZoomBaseView<T extends View> extends LinearLayout {
     private boolean isZooming;
     private boolean isPullStart;
 
-    protected int mModel;
+    protected int mMode;
     private int mTouchSlop;
 
     private OnPullZoomListener mOnPullZoomListener;
@@ -48,7 +50,7 @@ public abstract class PullZoomBaseView<T extends View> extends LinearLayout {
 
     private void init(Context context, AttributeSet attrs){
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
-        mModel = createDefaultPullZoomModel();
+        mMode = createDefaultPullZoomModel();
 
         isZoomEnable = true;
         isPullStart = false;
@@ -99,7 +101,7 @@ public abstract class PullZoomBaseView<T extends View> extends LinearLayout {
         mLastTouchY = event.getY();
         mLastTouchX = event.getX();
 
-        float scrollValue = mModel == ZOOM_HEADER ?
+        float scrollValue = mMode == ZOOM_HEADER ?
                 Math.round(Math.min(mInitTouchY - mLastTouchY, 0) / FRICTION)
                 :Math.round(Math.max(mInitTouchY - mLastTouchY, 0) / FRICTION);
         pullZoomEvent(scrollValue);
@@ -118,7 +120,7 @@ public abstract class PullZoomBaseView<T extends View> extends LinearLayout {
             smoothScrollToTop();
 
             if (mOnPullZoomListener != null){
-                final float scrollValue = mModel == ZOOM_HEADER ?
+                final float scrollValue = mMode == ZOOM_HEADER ?
                         Math.round(Math.min(mInitTouchY - mLastTouchY, 0) / FRICTION)
                         :Math.round(Math.max(mInitTouchY - mLastTouchY, 0) / FRICTION);
 
@@ -138,7 +140,6 @@ public abstract class PullZoomBaseView<T extends View> extends LinearLayout {
         if (event.getAction() == MotionEvent.ACTION_MOVE && isPullStart){
             return true;
         }
-
 
         performInterceptAction(event);
         return isPullStart;
@@ -169,6 +170,7 @@ public abstract class PullZoomBaseView<T extends View> extends LinearLayout {
 
     private void onZoomReadyActionDown(MotionEvent event) {
         mInitTouchY = mLastTouchY = event.getY();
+        mInitTouchX = mLastTouchX = event.getX();
         isPullStart = false;
     }
 
@@ -179,8 +181,9 @@ public abstract class PullZoomBaseView<T extends View> extends LinearLayout {
         float xDistance = mCurrentX - mLastTouchX;
         float yDistance = mCurrentY - mLastTouchY;
 
-        if (mModel == ZOOM_HEADER && yDistance > mTouchSlop && yDistance > Math.abs(xDistance)
-                || mModel == ZOOM_FOOTER && -yDistance > mTouchSlop && -yDistance > Math.abs(xDistance)){
+        Log.i("debug", "mMode" + mMode + "yDistance " + yDistance + "xDistance " + xDistance);
+        if (mMode == ZOOM_HEADER && yDistance > mTouchSlop && yDistance > Math.abs(xDistance)
+                || mMode == ZOOM_FOOTER && -yDistance > mTouchSlop && -yDistance > Math.abs(xDistance)){
             mLastTouchY = mCurrentY;
             mLastTouchX = mCurrentX;
 
@@ -192,7 +195,7 @@ public abstract class PullZoomBaseView<T extends View> extends LinearLayout {
     }
 
     public void setModel(int mModel) {
-        this.mModel = mModel;
+        this.mMode = mModel;
     }
 
     public void setOnPullZoomListener(OnPullZoomListener mOnPullZoomListener) {
