@@ -42,6 +42,9 @@ Using RecyclerView requires three steps:<br/>
 ## Thanks 
  [PullZoomView] (https://github.com/Frank-Zhu/PullZoomView)
  
+## Misc
+ ***QQ Group:*** **342748245**
+ 
 ## License
     Copyright 2015-2019 dinus
 
