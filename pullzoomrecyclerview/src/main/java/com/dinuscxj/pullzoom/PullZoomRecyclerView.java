@@ -13,7 +13,9 @@ import android.view.animation.Interpolator;
  */
 public class PullZoomRecyclerView extends PullZoomBaseView<RecyclerView> {
 
-    private int mHeaderHeight;
+    private int mHeaderContainerHeight;
+    private int mZoomViewHeight;
+
     private Interpolator sSmoothToTopInterpolator;
     private ZoomBackRunnable mZoomBackAnimation;
 
@@ -27,7 +29,8 @@ public class PullZoomRecyclerView extends PullZoomBaseView<RecyclerView> {
     }
 
     private void init() {
-        mHeaderHeight = 0;
+        mHeaderContainerHeight = 0;
+        mZoomViewHeight = 0;
         sSmoothToTopInterpolator = createDefaultInterpolator();
         mZoomBackAnimation = new ZoomBackRunnable();
     }
@@ -39,7 +42,7 @@ public class PullZoomRecyclerView extends PullZoomBaseView<RecyclerView> {
     @SuppressWarnings("ResourceType")
     @Override
     protected RecyclerView createWrapperView(Context context, AttributeSet attrs) {
-        RecyclerView recyclerView= new RecyclerView(context, attrs);
+        RecyclerView recyclerView = new RecyclerView(context, attrs);
         //prevent id repeat
         recyclerView.setId(Integer.MIN_VALUE);
         return recyclerView;
@@ -67,10 +70,15 @@ public class PullZoomRecyclerView extends PullZoomBaseView<RecyclerView> {
             mZoomBackAnimation.abortAnimation();
         }
 
-        if (mHeaderContainer != null) {
+        if (mHeaderContainer != null && mZoomView != null) {
             ViewGroup.LayoutParams layoutParams = mHeaderContainer.getLayoutParams();
-            layoutParams.height = (int) (Math.abs(scrollValue) + mHeaderHeight);
+            layoutParams.height = (int) (Math.abs(scrollValue) + mHeaderContainerHeight);
             mHeaderContainer.setLayoutParams(layoutParams);
+
+            ViewGroup.LayoutParams zoomViewLayoutParams = mZoomView.getLayoutParams();
+            zoomViewLayoutParams.height = mZoomViewHeight + layoutParams.height
+                    - mHeaderContainerHeight;
+            mZoomView.setLayoutParams(zoomViewLayoutParams);
         }
 
         if (mMode == ZOOM_FOOTER) {
@@ -117,7 +125,8 @@ public class PullZoomRecyclerView extends PullZoomBaseView<RecyclerView> {
     }
 
     private boolean checkFirstItemCompletelyVisible(RecyclerView.LayoutManager mLayoutManager) {
-        int firstVisiblePosition = ((RecyclerView.LayoutParams) mLayoutManager.getChildAt(0).getLayoutParams()).getViewPosition();
+        int firstVisiblePosition = ((RecyclerView.LayoutParams) mLayoutManager.getChildAt(0)
+                .getLayoutParams()).getViewAdapterPosition();
         if (firstVisiblePosition == 0) {
             final View firstVisibleChild = mWrapperView.getChildAt(0);
             if (firstVisibleChild != null) {
@@ -130,14 +139,14 @@ public class PullZoomRecyclerView extends PullZoomBaseView<RecyclerView> {
     private boolean isLastItemCompletelyVisible() {
         if (mWrapperView != null) {
             RecyclerView.Adapter adapter = mWrapperView.getAdapter();
-            RecyclerView.LayoutManager mLayoutmanager = mWrapperView.getLayoutManager();
+            RecyclerView.LayoutManager mLayoutManager = mWrapperView.getLayoutManager();
 
             if (null == adapter || adapter.getItemCount() == 0) {
                 return true;
-            } else if (null == mLayoutmanager || mLayoutmanager.getItemCount() == 0){
+            } else if (null == mLayoutManager || mLayoutManager.getItemCount() == 0) {
                 return false;
             } else {
-                return checkLastItemCompletelyVisible(mLayoutmanager);
+                return checkLastItemCompletelyVisible(mLayoutManager);
             }
         }
 
@@ -146,12 +155,13 @@ public class PullZoomRecyclerView extends PullZoomBaseView<RecyclerView> {
 
     private boolean checkLastItemCompletelyVisible(RecyclerView.LayoutManager mLayoutmanager) {
         int lastVisiblePosition = mLayoutmanager.getChildCount() - 1;
-        int currentLastVisiblePosition = ((RecyclerView.LayoutParams) mLayoutmanager.getChildAt(lastVisiblePosition).getLayoutParams()).getViewPosition();
+        int currentLastVisiblePosition = ((RecyclerView.LayoutParams) mLayoutmanager
+                .getChildAt(lastVisiblePosition).getLayoutParams()).getViewAdapterPosition();
         if (currentLastVisiblePosition == mLayoutmanager.getItemCount() - 1) {
             final View lastVisibleChild = mWrapperView.getChildAt(lastVisiblePosition);
             if (lastVisibleChild != null) {
-                if (mHeaderContainer != null && mHeaderHeight <= 0) {
-                    mHeaderHeight = mHeaderContainer.getMeasuredHeight();
+                if (mHeaderContainer != null && mHeaderContainerHeight <= 0) {
+                    mHeaderContainerHeight = mHeaderContainer.getMeasuredHeight();
                 }
                 return lastVisibleChild.getBottom() <= mWrapperView.getBottom();
             }
@@ -163,8 +173,12 @@ public class PullZoomRecyclerView extends PullZoomBaseView<RecyclerView> {
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
 
-        if (mHeaderContainer != null && mHeaderHeight <= 0) {
-            mHeaderHeight = mHeaderContainer.getMeasuredHeight();
+        if (mHeaderContainer != null && mHeaderContainerHeight <= 0) {
+            mHeaderContainerHeight = mHeaderContainer.getMeasuredHeight();
+        }
+
+        if (mZoomView != null && mZoomViewHeight <= 0) {
+            mZoomViewHeight = mZoomView.getMeasuredHeight();
         }
     }
 
@@ -186,32 +200,43 @@ public class PullZoomRecyclerView extends PullZoomBaseView<RecyclerView> {
         }
 
         public void run() {
-            if (mZoomView != null && (!mIsFinished) && (mScale > 1.0f)) {
+            if (mHeaderContainer != null && mZoomView != null && (!mIsFinished) && (mScale > 1.0f)) {
                 // fix PullToZoomView bug  ---dinus
                 // should not convert the System.currentTimeMillis() to float
                 // otherwise the value of (System.currentTimeMillis() - mStartTime) will still be zero
                 float zoomBackProgress = (System.currentTimeMillis() - mStartTime) / (float) mDuration;
-                ViewGroup.LayoutParams localLayoutParams = mHeaderContainer.getLayoutParams();
+                ViewGroup.LayoutParams headerContainerLayoutParams = mHeaderContainer.getLayoutParams();
+                ViewGroup.LayoutParams zoomViewLayoutParams = mZoomView.getLayoutParams();
 
                 if (zoomBackProgress > 1.0f) {
-                    localLayoutParams.height = mHeaderHeight;
-                    mHeaderContainer.setLayoutParams(localLayoutParams);
+                    headerContainerLayoutParams.height = mHeaderContainerHeight;
+                    mHeaderContainer.setLayoutParams(headerContainerLayoutParams);
+
+                    zoomViewLayoutParams.height = mZoomViewHeight;
+                    mZoomView.setLayoutParams(zoomViewLayoutParams);
+
                     mIsFinished = true;
                     return;
                 }
 
-                float currentSacle = mScale - (mScale - 1.0F) * sSmoothToTopInterpolator.getInterpolation(zoomBackProgress);
-                localLayoutParams.height = (int) (currentSacle * mHeaderHeight);
-                mHeaderContainer.setLayoutParams(localLayoutParams);
+                float currentScale = mScale - (mScale - 1.0F)
+                        * sSmoothToTopInterpolator.getInterpolation(zoomBackProgress);
+                headerContainerLayoutParams.height = (int) (currentScale * mHeaderContainerHeight);
+                mHeaderContainer.setLayoutParams(headerContainerLayoutParams);
+
+                zoomViewLayoutParams.height = mZoomViewHeight + headerContainerLayoutParams.height
+                        - mHeaderContainerHeight;
+                mZoomView.setLayoutParams(zoomViewLayoutParams);
+
                 post(this);
             }
         }
 
         public void startAnimation(long animationDuration) {
-            if (mZoomView != null) {
+            if (mZoomView != null && mHeaderContainer != null) {
                 mStartTime = System.currentTimeMillis();
                 mDuration = animationDuration;
-                mScale = (float) mHeaderContainer.getHeight() / mHeaderHeight;
+                mScale = (float) mHeaderContainer.getHeight() / mHeaderContainerHeight;
                 mIsFinished = false;
                 post(this);
             }

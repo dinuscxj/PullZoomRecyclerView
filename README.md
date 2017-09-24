@@ -14,11 +14,15 @@ Using RecyclerView requires three steps:<br/>
  * Listening pull process (including pullStart、 pullZooming, pullEnd)
  * You can reset the default smooth scroll to top interpolator(the default is DecelerateInterpolator)
 
+## Precautions
+ 1. Please make sure `PullZoomRecyclerView` is the root layout, or the parent of the `PullZoomRecyclerView` not intercept the touch event.
+ 2. Please ensure the Ancestor of the ZoomView support zoom, means that the Ancestor of the ZoomView should use wrap_parent, if the Ancestor is the exact value,  whatever you adjust the child, will not work well.
+
 ## Usage
  Add dependency
  ```gradle
  dependencies {
-    compile 'com.dinuscxj:pullzoomrecyclerview:1.0.2'
+    compile 'com.dinuscxj:pullzoomrecyclerview:1.0.4'
  }
  ```
 
