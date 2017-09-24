@@ -44,7 +44,7 @@ Using RecyclerView requires three steps:<br/>
  mPullZoomRecyclerView.setHeaderContainer(headerContainer);
  ```
 ## Thanks 
- [PullZoomView] (https://github.com/Frank-Zhu/PullZoomView)
+ [PullZoomView](https://github.com/Frank-Zhu/PullZoomView)
  
 ## Misc
  ***QQ Group:*** **342748245**
